@@ -15,11 +15,9 @@ public class Pes extends Zviera {
     }
 
     public List<String> getPrikazy() {
-        List<String> kopia = new ArrayList<>();
-        for (String prikaz : this.prikazy) {
-            kopia.add(prikaz);
-        }
-        return kopia;
+        // Vytvorenie kopie, ktora zabezpeci,
+        // ze z vonku nebude mozne modifikovat atribut
+        return new ArrayList<>(this.prikazy);
     }
 
     @Override
