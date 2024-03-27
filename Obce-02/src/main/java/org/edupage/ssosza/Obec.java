@@ -14,6 +14,15 @@ public class Obec {
         this.populacia = populacia;
     }
 
+    @Override
+    public String toString() {
+        return "Obec{" +
+                "okres='" + okres + '\'' +
+                ", nazov='" + nazov + '\'' +
+                ", populacia=" + populacia +
+                '}';
+    }
+
     public String getOkres() {
         return this.okres;
     }

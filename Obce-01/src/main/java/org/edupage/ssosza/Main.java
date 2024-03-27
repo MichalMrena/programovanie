@@ -1,7 +1,5 @@
 package org.edupage.ssosza;
 
-import javax.swing.*;
-import java.awt.*;
 import java.text.Collator;
 import java.util.List;
 import java.util.Locale;
@@ -9,7 +7,7 @@ import java.util.Locale;
 public class Main {
 
     private void databazaTest() {
-        DatabazaObci databazaObci = new DatabazaObci();
+        CsvDatabazaObci databazaObci = new CsvDatabazaObci();
 
         List<Obec> obce = databazaObci.getObce();
         for (Obec obec : obce) {
@@ -29,22 +27,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        JFrame okno = new JFrame("Databaza obci");
+//        IDatabazaObci databaza = new CsvDatabazaObci();
+        IDatabazaObci databaza = new TestovaciaDatabazaObci();
+        HlavneOkno okno = new HlavneOkno(databaza);
 
 
-        JButton tlactiko = new JButton("Do it!");
-        tlactiko.setPreferredSize(new Dimension(100, 35));
-        okno.getContentPane().setLayout(new BorderLayout());
-
-        JLabel label = new JLabel("Okresy:");
-        okno.getContentPane().add(label, BorderLayout.NORTH);
-
-        okno.getContentPane().add(tlactiko, BorderLayout.NORTH);
-
-
-        okno.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        okno.setPreferredSize(new Dimension(800, 600));
-        okno.pack();
-        okno.setVisible(true);
     }
 }

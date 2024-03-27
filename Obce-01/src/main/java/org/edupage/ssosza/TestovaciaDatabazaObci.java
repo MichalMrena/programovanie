@@ -16,6 +16,8 @@ public class TestovaciaDatabazaObci implements IDatabazaObci {
         this.obce.add(new Obec("Kotešová", "Bytča", List.of(2249, 2206, 2112)));
         this.obce.add(new Obec("Hvozdnica", "Bytča", List.of(1228, 1200, 1189)));
         this.obce.add(new Obec("Predmier", "Bytča", List.of(1347, 1348, 1352)));
+        this.okresy.add("Bánovce nad Bebravou");
+        this.okresy.add("Bytča");
     }
 
     @Override

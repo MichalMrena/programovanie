@@ -9,16 +9,16 @@ import java.util.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
-public class DatabazaObci implements IDatabazaObci {
+public class CsvDatabazaObci implements IDatabazaObci {
 
     private final List<Obec> obce;
     private final Map<String, List<Obec>> okresToObec;
 
-    public DatabazaObci() {
+    public CsvDatabazaObci() {
         this.obce = new ArrayList<>();
         this.okresToObec = new HashMap<>(); // TODO neskor
 
-        InputStream input = DatabazaObci.class.getResourceAsStream("/obce-data.csv");
+        InputStream input = CsvDatabazaObci.class.getResourceAsStream("/obce-data.csv");
         BufferedReader in = new BufferedReader(new InputStreamReader(input));
 
         // Parser na citanie CSV suboru
