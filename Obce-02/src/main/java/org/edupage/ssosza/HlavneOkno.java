@@ -2,16 +2,17 @@ package org.edupage.ssosza;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.List;
 
 public class HlavneOkno {
 
     private final JFrame okno;
     private IDatabazaObci databaza;
+    private ObceTableModel model;
 
     public HlavneOkno(IDatabazaObci databaza) {
         this.databaza = databaza;
+        this.model = new ObceTableModel(this.databaza);
 
         this.okno = new JFrame("Databaza obci");
         Container panelOkno = this.okno.getContentPane();
@@ -27,7 +28,8 @@ public class HlavneOkno {
         // Okresy ComboBox
         List<String> okresy = this.databaza.getOkresy();
         String[] poleOkresov = okresy.toArray(new String[0]);
-        northPanel.add(new JComboBox<>(poleOkresov));
+        JComboBox<String> okresyCombobox = new JComboBox<>(poleOkresov);
+        northPanel.add(okresyCombobox);
 
         // Zobraz Button
         JButton buttonZobraz = new JButton("Zobraz obce");
@@ -36,6 +38,9 @@ public class HlavneOkno {
         });
         northPanel.add(buttonZobraz);
         panelOkno.add(northPanel, BorderLayout.NORTH);
+
+        this.model.zobrazObce((String)okresyCombobox.getSelectedItem());
+        panelOkno.add(new JTable(this.model), BorderLayout.CENTER);
 
         this.okno.setPreferredSize(new Dimension(800, 600));
         this.okno.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

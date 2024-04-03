@@ -28,8 +28,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        IDatabazaObci databazaObci = new CsvDatabazaObci();
-        IDatabazaObci databazaObci = new TestovaciaDatabazaObci();
+        IDatabazaObci databazaObci = new CsvDatabazaObci();
+//        IDatabazaObci databazaObci = new TestovaciaDatabazaObci();
         HlavneOkno okno = new HlavneOkno(databazaObci);
 
         System.out.println(HlavneOkno.class.getCanonicalName());

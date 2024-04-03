@@ -1,5 +1,6 @@
 package org.edupage.ssosza;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Obec {
@@ -31,6 +32,6 @@ public class Obec {
     }
 
     public List<Integer> getPopulacia() {
-        return this.populacia;
+        return Collections.unmodifiableList(this.populacia);
     }
 }
