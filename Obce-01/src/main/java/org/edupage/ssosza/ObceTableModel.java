@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ObceTableModel extends AbstractTableModel {
 
-    private IDatabazaObci databazaObci;
+    private final IDatabazaObci databazaObci;
     private List<Obec> zobrazeneObce;
 
     public ObceTableModel(IDatabazaObci databazaObci) {
@@ -15,6 +15,20 @@ public class ObceTableModel extends AbstractTableModel {
 
     public void zobrazObce(String okres) {
         this.zobrazeneObce = this.databazaObci.getObce(okres);
+    }
+
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return this.getValueAt(0, columnIndex).getClass();
+    }
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> "Obec";
+            case 1 -> "Populacia";
+            default -> throw new RuntimeException("Invalid column index");
+        };
     }
 
     @Override
@@ -31,16 +45,11 @@ public class ObceTableModel extends AbstractTableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         Obec obec = this.zobrazeneObce.get(rowIndex);
 
-        switch (columnIndex) {
-            case 0:
-                return obec.getNazov();
-
-            case 1:
-                return obec.getPopulacia().get(0);
-
-            default:
-                // TODO vlastna vynimka
-                throw new RuntimeException("Invalid column number");
-        }
+        // TODO vlastna vynimka
+        return switch (columnIndex) {
+            case 0 -> obec.getNazov();
+            case 1 -> obec.getPopulacia().get(0);
+            default -> throw new RuntimeException("Invalid column index");
+        };
     }
 }

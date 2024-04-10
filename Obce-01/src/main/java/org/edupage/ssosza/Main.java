@@ -27,10 +27,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-//        IDatabazaObci databaza = new CsvDatabazaObci();
-        IDatabazaObci databaza = new TestovaciaDatabazaObci();
+        IDatabazaObci databaza = new CsvDatabazaObci();
+//        IDatabazaObci databaza = new TestovaciaDatabazaObci();
         HlavneOkno okno = new HlavneOkno(databaza);
-
-
     }
 }

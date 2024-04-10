@@ -18,6 +18,20 @@ public class ObceTableModel extends AbstractTableModel {
     }
 
     @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        return this.getValueAt(0, columnIndex).getClass();
+    }
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> "Obec";
+            case 1 -> "Populacia";
+            default -> throw new RuntimeException("Invalid column count!");
+        };
+    }
+
+    @Override
     public int getRowCount() {
         return this.zobrazene.size();
     }

@@ -31,8 +31,5 @@ public class Main {
         IDatabazaObci databazaObci = new CsvDatabazaObci();
 //        IDatabazaObci databazaObci = new TestovaciaDatabazaObci();
         HlavneOkno okno = new HlavneOkno(databazaObci);
-
-        System.out.println(HlavneOkno.class.getCanonicalName());
-
     }
 }

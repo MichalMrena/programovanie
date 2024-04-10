@@ -10,6 +10,8 @@ public class HlavneOkno {
     private final IDatabazaObci databaza;
     private final ObceTableModel model;
 
+    private final JComboBox<String> okresyCombobox;
+
     public HlavneOkno(IDatabazaObci databaza) {
         this.databaza = databaza;
         this.model = new ObceTableModel(this.databaza);
@@ -28,22 +30,28 @@ public class HlavneOkno {
         // okres combobox
         List<String> okresy = this.databaza.getOkresy();
         String[] poleOkresov = okresy.toArray(new String[0]);
-        JComboBox<String> okresyCombobox = new JComboBox<>(poleOkresov);
-        northPanel.add(okresyCombobox);
+        this.okresyCombobox = new JComboBox<>(poleOkresov);
+        northPanel.add(this.okresyCombobox);
 
         // zobraz obce button
         JButton zobrazObceButton = new JButton("Zobraz obce");
         zobrazObceButton.addActionListener(e -> {
-            this.zobrazOkresy();
+            this.zobrazObce();
         });
         northPanel.add(zobrazObceButton);
         panelOkna.add(northPanel, BorderLayout.NORTH);
 
         // Center Panel
         JPanel centerPanel = new JPanel();
-        this.model.zobrazObce((String) okresyCombobox.getSelectedItem());
+        this.model.zobrazObce(this.getVybranyOkres());
         JTable table = new JTable(this.model);
-        centerPanel.add(table);
+        table.setAutoCreateRowSorter(true);
+        JScrollPane scrollPane = new JScrollPane(
+                table,
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        centerPanel.add(scrollPane);
         panelOkna.add(centerPanel, BorderLayout.CENTER);
 
         this.okno.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -52,10 +60,14 @@ public class HlavneOkno {
         this.okno.setVisible(true);
     }
 
-    private void zobrazOkresy() {
-        // precitaj aktualny vyber
-        // zobraz obce z daneho okresu
-        System.out.println("fungujem!!!!");
+    private String getVybranyOkres() {
+        return (String)this.okresyCombobox.getSelectedItem();
+    }
+
+    private void zobrazObce() {
+        String okres = this.getVybranyOkres();
+        this.model.zobrazObce(okres);
+        this.model.fireTableDataChanged();
     }
 }
 

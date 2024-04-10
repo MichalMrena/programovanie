@@ -7,8 +7,9 @@ import java.util.List;
 public class HlavneOkno {
 
     private final JFrame okno;
-    private IDatabazaObci databaza;
-    private ObceTableModel model;
+    private final IDatabazaObci databaza;
+    private final ObceTableModel model;
+    private final JComboBox<String> okresyCombobox;
 
     public HlavneOkno(IDatabazaObci databaza) {
         this.databaza = databaza;
@@ -28,8 +29,8 @@ public class HlavneOkno {
         // Okresy ComboBox
         List<String> okresy = this.databaza.getOkresy();
         String[] poleOkresov = okresy.toArray(new String[0]);
-        JComboBox<String> okresyCombobox = new JComboBox<>(poleOkresov);
-        northPanel.add(okresyCombobox);
+        this.okresyCombobox = new JComboBox<>(poleOkresov);
+        northPanel.add(this.okresyCombobox);
 
         // Zobraz Button
         JButton buttonZobraz = new JButton("Zobraz obce");
@@ -39,8 +40,17 @@ public class HlavneOkno {
         northPanel.add(buttonZobraz);
         panelOkno.add(northPanel, BorderLayout.NORTH);
 
-        this.model.zobrazObce((String)okresyCombobox.getSelectedItem());
-        panelOkno.add(new JTable(this.model), BorderLayout.CENTER);
+        JPanel centerPanel = new JPanel();
+        this.model.zobrazObce(this.getVybranyOkres());
+        JTable table = new JTable(this.model);
+        table.setAutoCreateRowSorter(true);
+        JScrollPane scrollPane = new JScrollPane(
+            table,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+            JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        centerPanel.add(scrollPane);
+        panelOkno.add(centerPanel, BorderLayout.CENTER);
 
         this.okno.setPreferredSize(new Dimension(800, 600));
         this.okno.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -49,7 +59,11 @@ public class HlavneOkno {
     }
 
     private void zobrazObce() {
-        // TODO ...
-        System.out.println("fungujem, zobrazujem, ...");
+        this.model.zobrazObce(this.getVybranyOkres());
+        this.model.fireTableDataChanged();
+    }
+
+    private String getVybranyOkres() {
+        return (String) this.okresyCombobox.getSelectedItem();
     }
 }
