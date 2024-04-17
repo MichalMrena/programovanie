@@ -29,30 +29,41 @@ public class CsvDatabazaObci implements IDatabazaObci {
                 .build();
 
         try {
-
             Iterable<CSVRecord> zaznamy = parser.parse(in);
-
             Iterator<CSVRecord> iterator = zaznamy.iterator();
+            int cisloRiadku = 1;
             CSVRecord hlavicka = iterator.next();
             while (iterator.hasNext()) {
                 CSVRecord record = iterator.next();
-                String okres = record.get(0).substring(6);
-                String nazov = record.get(1);
-
-                List<Integer> populacie = new ArrayList<>();
-                for (int i = 2; i < record.size(); i++) {
-                    String populaciaStr = record.get(i);
-                    int populacia = Integer.parseInt(populaciaStr);
-                    populacie.add(populacia);
+                ++cisloRiadku;
+                Obec obec = null;
+                try {
+                    obec = parseObec(record, cisloRiadku);
+                    this.obce.add(obec);
+                } catch (ObecDataException e) {
+                    System.err.println(e.getMessage());
                 }
-
-                Obec obec = new Obec(nazov, okres, populacie);
-                this.obce.add(obec);
             }
-
         } catch (IOException e) {
             throw new RuntimeException("Failed to read CSV file!");
         }
+    }
+
+    private static Obec parseObec(CSVRecord record, int cisloRiadku) throws ObecDataException {
+        String okres = record.get(0).substring(6);
+        String nazov = record.get(1);
+
+        List<Integer> populacie = new ArrayList<>();
+        for (int i = 2; i < record.size(); i++) {
+            String populaciaStr = record.get(i);
+            try {
+                int populacia = Integer.parseInt(populaciaStr);
+                populacie.add(populacia);
+            } catch (NumberFormatException e) {
+                throw new ObecDataException(cisloRiadku, i + 1);
+            }
+        }
+        return new Obec(nazov, okres, populacie);
     }
 
     @Override

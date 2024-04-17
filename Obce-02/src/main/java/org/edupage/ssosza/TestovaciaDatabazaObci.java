@@ -13,11 +13,11 @@ public class TestovaciaDatabazaObci implements IDatabazaObci {
         this.obce = new ArrayList<>();
         this.okresy = new ArrayList<>();
 
-        this.obce.add(new Obec("Cimenná", "Bánovce nad Bebravou", List.of(106, 105, 101)));
-        this.obce.add(new Obec("Pravotince", "Bánovce nad Bebravou", List.of(359, 355, 345)));
-        this.obce.add(new Obec("Kotešová", "Bytča", List.of(2249, 2206, 2112)));
-        this.obce.add(new Obec("Hvozdnica", "Bytča", List.of(1228, 1200, 1189)));
-        this.obce.add(new Obec("Predmier", "Bytča", List.of(1347, 1348, 1352)));
+        this.obce.add(new Obec("Bánovce nad Bebravou", "Cimenná", List.of(106, 105, 101)));
+        this.obce.add(new Obec("Bánovce nad Bebravou", "Pravotince", List.of(359, 355, 345)));
+        this.obce.add(new Obec("Bytča", "Kotešová", List.of(2249, 2206, 2112)));
+        this.obce.add(new Obec("Bytča", "Hvozdnica", List.of(1228, 1200, 1189)));
+        this.obce.add(new Obec("Bytča", "Predmier", List.of(1347, 1348, 1352)));
 
         this.okresy.add("Bánovce nad Bebravou");
         this.okresy.add("Bytča");

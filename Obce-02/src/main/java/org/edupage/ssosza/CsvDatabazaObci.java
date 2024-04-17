@@ -16,13 +16,13 @@ public class CsvDatabazaObci implements IDatabazaObci {
 
     // private Map<String, List<Obec>> okresToObec;
 
-    public CsvDatabazaObci() {
+    public CsvDatabazaObci() throws IOException {
         this.obce = new ArrayList<>();
-        this.okresToRange = new HashMap<>(); // TODO neskor
+        this.okresToRange = new HashMap<>();
 
         InputStream input = CsvDatabazaObci.class.getResourceAsStream("/data-obce.csv");
         if (input == null) {
-            throw new RuntimeException("Missing data file!");
+            throw new IOException("Missing data file!");
         }
 
         BufferedReader in = new BufferedReader(new InputStreamReader(input));
@@ -30,27 +30,57 @@ public class CsvDatabazaObci implements IDatabazaObci {
                 .setDelimiter(';')
                 .setSkipHeaderRecord(true)
                 .build();
-        try {
-            Iterable<CSVRecord> zaznamy = parser.parse(in);
-
-            Iterator<CSVRecord> iterator = zaznamy.iterator();
-            CSVRecord hlavicka = iterator.next();
-            while (iterator.hasNext()) {
-                CSVRecord record = iterator.next();
-                String okres = record.get(0).substring(6);
-                String nazov = record.get(1);
-                List<Integer> populacie = new ArrayList<>();
-                for (int i = 2; i < record.size(); i++) {
-                    String populaciaStr = record.get(i);
-                    int populacia = Integer.parseInt(populaciaStr);
-                    populacie.add(populacia);
-                }
-                this.obce.add(new Obec(okres, nazov, populacie));
+        Iterable<CSVRecord> zaznamy = parser.parse(in);
+        Iterator<CSVRecord> iterator = zaznamy.iterator();
+        int cisloRiadku = 1;
+        CSVRecord hlavicka = iterator.next();
+        while (iterator.hasNext()) {
+            CSVRecord record = iterator.next();
+            ++cisloRiadku;
+            Obec obec;
+            try {
+                obec = parseObec(record, cisloRiadku);
+                this.obce.add(obec);
+            } catch (ObecCsvFormatException e) {
+                System.err.println(e.getMessage());
             }
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read data file!");
+            parseObecOpt(record, cisloRiadku).ifPresentOrElse(
+                    this.obce::add,
+                    () -> System.out.println("Failed to parse obec")
+            );
         }
+    }
+
+    private static Obec parseObec(CSVRecord record, int cisloRiadku) throws ObecCsvFormatException {
+        String okres = record.get(0).substring(6);
+        String nazov = record.get(1);
+        List<Integer> populacie = new ArrayList<>();
+        for (int i = 2; i < record.size(); i++) {
+            String populaciaStr = record.get(i);
+            try {
+                int populacia = Integer.parseInt(populaciaStr);
+                populacie.add(populacia);
+            } catch (NumberFormatException e) {
+                throw new ObecCsvFormatException(cisloRiadku, i + 1, populaciaStr);
+            }
+        }
+        return new Obec(okres, nazov, populacie);
+    }
+
+    private static Optional<Obec> parseObecOpt(CSVRecord record, int cisloRiadku) {
+        String okres = record.get(0).substring(6);
+        String nazov = record.get(1);
+        List<Integer> populacie = new ArrayList<>();
+        for (int i = 2; i < record.size(); i++) {
+            String populaciaStr = record.get(i);
+            try {
+                int populacia = Integer.parseInt(populaciaStr);
+                populacie.add(populacia);
+            } catch (NumberFormatException e) {
+                return Optional.empty();
+            }
+        }
+        return Optional.of(new Obec(okres, nazov, populacie));
     }
 
     @Override
