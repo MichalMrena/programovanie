@@ -13,11 +13,12 @@ public class HracClovek extends Hrac {
 
         do {
             try {
+                System.out.format("[%s] Zadaj 1 alebo 2: ", this.getMeno());
                 int cislo = sc.nextInt();
                 if (cislo == 1 || cislo == 2) {
                     pocet = cislo;
                 } else {
-                    System.out.println("Zadaj 1 alebo 2.");
+                    System.out.println("Zadaj 1 alebo 2!");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Zadaj cislo!");

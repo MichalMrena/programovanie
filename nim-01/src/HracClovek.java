@@ -10,6 +10,7 @@ public class HracClovek extends Hrac {
         int pocet = -1;
         Scanner sc = new Scanner(System.in);
         do {
+            System.out.format("[%s]: Zadaj 1 alebo 2: ", this.getMeno());
             String vstup = sc.nextLine();
             try {
                 int cislo = Integer.parseInt(vstup);
